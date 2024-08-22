@@ -11,7 +11,7 @@ def hartree_energy(Fouridx, C):
                 for nu in range(0,M):
                     for kappa in range(0,M):
                         for lamda in range(0,M):
-                            print(i,j,mu,nu,kappa,lamda)
+                            #print(i,j,mu,nu,kappa,lamda)
                             energy += C[i,mu]*C[j,nu]*C[i,kappa]*C[j,lamda]*Fouridx[mu,nu,kappa,lamda]
 
     return energy
@@ -19,10 +19,11 @@ def hartree_energy(Fouridx, C):
 
 mol = gto.Mole()
 mol.atom = """
-    He    0.    0.    0.
+    Be    0.    0.    0.
 """
 # this basis has 2 functions for Helium
-mol.basis = "6-31g"
+mol.basis = "sto-6g"
+#mol.basis = "6-31g"
 #mol.basis = "ccpvdz"
 mol.build()
 
@@ -39,6 +40,11 @@ for i,column in enumerate(eri): # these arent really row, column and so on but t
             for l, element in enumerate(hyper):
                 print(f"element <{i}{j}|{k}{l} > is {element}" )
 print("*"*24)
+print("Overlap Integrals")
+S = mol.intor('int1e_ovlp')
+print(S)
+
+
 
 ## Run Hartree-Fock.
 mf = scf.RHF(mol)
