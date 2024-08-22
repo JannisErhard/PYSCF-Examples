@@ -19,11 +19,11 @@ def hartree_energy(Fouridx, C):
 
 mol = gto.Mole()
 mol.atom = """
-    Be    0.    0.    0.
+    He    0.    0.    0.
 """
 # this basis has 2 functions for Helium
-mol.basis = "sto-6g"
-#mol.basis = "6-31g"
+#mol.basis = "sto-6g"
+mol.basis = "6-31g"
 #mol.basis = "ccpvdz"
 mol.build()
 
@@ -55,9 +55,9 @@ print("MO-Coefficent matrix")
 print(mf.mo_coeff)
 print("*"*24)
 
-print("den ?")
-print(np.matmul(mf.mo_coeff.T,mf.mo_coeff))
-print("*"*24)
+#print("den ?")
+#print(np.matmul(mf.mo_coeff.T,mf.mo_coeff))
+#print("*"*24)
 
 
 # get j, k and gamma (1RDM) matrix from hf, 
@@ -75,7 +75,7 @@ print(f"h_0 = {np.trace(np.matmul(h,gamma))} U = {1/2*np.trace(np.matmul(J,gamma
 print(np.trace(np.matmul(h,gamma))+1/2.*np.trace(np.matmul(J,gamma))-1/4.*np.trace(np.matmul(K,gamma)))
 
 # this should also work
-print(hartree_energy(eri, mf.mo_coeff))
+print(hartree_energy(eri, mf.mo_coeff.T))
 
 #
 ## Find electron-repulsion integrals (eri).
