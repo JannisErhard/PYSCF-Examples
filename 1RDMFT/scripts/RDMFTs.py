@@ -1,5 +1,8 @@
 import numpy as np
 from numba import prange, jit, njit
+import sys
+sys.path.insert(0, './build/')
+import RDMFT
 
 # for jit and prange
 @jit(nopython=True, parallel=True)
@@ -134,7 +137,8 @@ def energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn):
     return E_tot, Vee, E_c 
 
 def energy_components_mueller(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn):
-    E_H = ONERDMFT_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
+    #E_H = ONERDMFT_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
+    E_H = RDMFT.wrap_hartree(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
     Mu_E_xc = ONERDMFT_Mueller_exchange_correlation_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
     Vee = E_H + Mu_E_xc
     E_tot = h1 + Vee + E_nn
