@@ -27,14 +27,14 @@ def ONERDMFT_Umrigar_hartree_energy_parallel(Fouridx, C, n):
     M = C.shape[0]
     K = Fouridx.shape[0]
     for a in  prange(0,M):
-        for b in [b for b in range(0,M) if b!=a ]:
+        for b in range(a+1,M): #[b for b in range(0,M) if b!=a ]:
             for mu in range(0,M):
                 for nu in range(0,M):
                     for kappa in range(0,M):
                         for lamda in range(0,M):
                             energy += n[a]*n[b]*C[mu,a]*C[nu,a]*C[kappa,b]*C[lamda,b]*Fouridx[mu%K,nu%K,kappa%K,lamda%K]
 
-    return 1/2.*energy
+    return energy
 @jit(nopython=True, parallel=True)
 def ONERDMFT_Umrigar_exchange_correlation_energy_parallel(Fouridx, C, n):
     energy = 0
