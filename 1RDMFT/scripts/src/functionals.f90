@@ -95,10 +95,10 @@ energy = 0d0
           DO kappa=1,2*M
             DO lambda=1,2*M
               energy = energy+sqrt(n(a)*n(b))&
-                      *C(mu,a)*C(nu,a)*C(kappa,b)*C(lambda,b)&
+                      *C(mu,a)*C(nu,b)*C(kappa,a)*C(lambda,b)&
                       *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
               energy = energy+sqrt(n(a+M)*n(b+M))&
-                      *C(mu,a+M)*C(nu,a+M)*C(kappa,b+M)*C(lambda,b+M)&
+                      *C(mu,a+M)*C(nu,b+M)*C(kappa,a+M)*C(lambda,b+M)&
                       *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
             ENDDO
           ENDDO
