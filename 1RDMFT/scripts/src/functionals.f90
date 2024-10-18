@@ -18,12 +18,15 @@ energy = 0d0
 !$omp private(a,b,mu,nu,kappa,lambda) &
 !$omp shared(M,n,C,eri,energy)
 !$omp do schedule(static,1) reduction(+:energy)
-  DO a=1,2*M
-    DO b=1,2*M
       DO mu=1,2*M
         DO nu=1,2*M
           DO kappa=1,2*M
             DO lambda=1,2*M
+  DO a=1,2*M
+              energy = energy+.5d0*n(a)*n(a)&
+                      *C(mu,a)*C(nu,a)*C(kappa,a)*C(lambda,a)&
+                      *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
+    DO b=a+1,2*M
               energy = energy+n(a)*n(b)&
                       *C(mu,a)*C(nu,a)*C(kappa,b)*C(lambda,b)&
                       *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
@@ -35,7 +38,7 @@ energy = 0d0
   ENDDO
 !$omp end do
 !$omp end parallel
-  res = .5d0*energy
+  res = energy
 end subroutine
 
 subroutine umrigar_hartree_energy(M,n,C,eri,res)
