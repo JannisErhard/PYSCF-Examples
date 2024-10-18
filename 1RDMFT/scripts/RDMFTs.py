@@ -129,7 +129,8 @@ def ONERDMFT_BBC1(Fouridx, C, n, Na, Nb):
     return energy
 
 def energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn):
-    E_U = ONERDMFT_Umrigar_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
+    #E_U = ONERDMFT_Umrigar_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
+    E_U = RDMFT.wrap_gu_hartree(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
     GU_E_xc = ONERDMFT_Umrigar_exchange_correlation_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
     Vee = E_U + GU_E_xc
     E_tot = h1 + Vee + E_nn
