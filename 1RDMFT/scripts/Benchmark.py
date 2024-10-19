@@ -94,5 +94,8 @@ for el in list(PSE.keys())[0:10]:
 
     #print(f"{el:2s}  {BBC1_E_c:1.6f} {BBC1_E_c_2:1.6f}  {BBC1_tot:3.6f} {BBC1_tot_2:3.6f} {BBC1_Vee:3.6f} {BBC1_Vee_2:3.6f}  ")
 
-    print(f"{el:2s} {GU_E_c:1.6f} {Mu_E_c:1.6f} {BBC1_E_c:1.6f} {FCI_c:1.6f} {GU_tot:3.6f} {Mu_tot:3.6f} {BBC1_tot:3.6f} {FCI_tot:3.6f} {GU_Vee:3.6f} {Mu_Vee:3.6f} {BBC1_Vee:3.6f} {FCI_Vee:3.6f}", flush=True)
+    print(f"{el:2s}\
+            {GU_E_c:1.6f} {Mu_E_c:1.6f} {BBC1_E_c:1.6f} {BBC2_E_c:1.6f} {BBC3_E_c:1.6f} {FCI_c:1.6f}\
+            {GU_tot:3.6f} {Mu_tot:3.6f} {BBC1_tot:3.6f} {BBC2_tot:3.6f} {BBC3_tot:3.6f} {FCI_tot:3.6f}\
+            {GU_Vee:3.6f} {Mu_Vee:3.6f} {BBC1_Vee:3.6f} {BBC2_Vee:3.6f} {BBC3_Vee:3.6f} {FCI_Vee:3.6f}", flush=True)
     stats.append([el, GU_E_c, Mu_E_c, BBC1_E_c, FCI_c, GU_tot, Mu_tot, BBC1_tot, FCI_tot, GU_Vee, Mu_Vee, BBC1_Vee,FCI_Vee]) 
