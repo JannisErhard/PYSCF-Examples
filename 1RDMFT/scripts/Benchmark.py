@@ -1,6 +1,5 @@
 import numpy as np
 from pyscf import gto, scf, fci
-from numba import prange, jit, njit
 from tabulate import tabulate
 from RDMFTs import energy_components_umrigar, energy_components_mueller, energy_components_bbc1
 from utils import expand_matrix, Add_Block_Matrices 
