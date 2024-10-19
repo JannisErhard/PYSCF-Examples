@@ -158,3 +158,61 @@ energy = 0d0
   res = -1d0*energy
 end subroutine
 
+subroutine Buijse_Baerends_Correction_One(M,n,C,eri,na,nb,res)
+use parallel
+IMPLICIT NONE
+
+INTEGER, INTENT(IN) :: M, na, nb
+REAL(8), INTENT(IN) :: n(2*M),C(2*M,2*M),eri(M,M,M,M)
+REAL(8) :: energy
+INTEGER :: a,b,mu,nu,kappa,lambda
+REAL(8), INTENT(OUT) :: res
+
+energy = 0d0
+!$omp parallel default(firstprivate) &
+!$omp private(a,b,mu,nu,kappa,lambda) &
+!$omp shared(M,n,C,eri,energy)
+!$omp do schedule(static,1) reduction(+:energy)
+  DO a=na+1,M
+    DO b=a+1,M
+      DO mu=1,2*M
+        DO nu=1,2*M
+          DO kappa=1,2*M
+            DO lambda=1,2*M
+              energy = energy+sqrt(n(a)*n(b))&
+                      *C(mu,a)*C(nu,b)*C(kappa,a)*C(lambda,b)&
+                      *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
+            ENDDO
+          ENDDO
+        ENDDO
+      ENDDO
+    ENDDO
+  ENDDO
+!$omp end do
+!$omp end parallel
+
+!$omp parallel default(firstprivate) &
+!$omp private(a,b,mu,nu,kappa,lambda) &
+!$omp shared(M,n,C,eri,energy)
+!$omp do schedule(static,1) reduction(+:energy)
+  DO a=M+nb+1,2*M
+    DO b=a+1,2*M
+      DO mu=1,2*M
+        DO nu=1,2*M
+          DO kappa=1,2*M
+            DO lambda=1,2*M
+              energy = energy+sqrt(n(a)*n(b))&
+                      *C(mu,a)*C(nu,b)*C(kappa,a)*C(lambda,b)&
+                      *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
+            ENDDO
+          ENDDO
+        ENDDO
+      ENDDO
+    ENDDO
+  ENDDO
+!$omp end do
+!$omp end parallel
+
+res = 2d0*energy
+end subroutine
+        

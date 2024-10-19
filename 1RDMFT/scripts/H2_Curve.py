@@ -17,7 +17,7 @@ for dist in R:
 
     """
     # this basis has 2 functions for Helium
-    mol.basis = "ccpvdz"
+    mol.basis = "ccpvtz"
     #mol.basis = "sto-6g"
     mol.spin =  0
     mol.verbose=0
@@ -79,9 +79,10 @@ for dist in R:
     FCI_Vee = FCI_tot - h1
 
 # calling 1RDMFT energy functions
-    GU_tot,GU_Vee,GU_E_c = energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn)
-    Mu_tot,Mu_Vee,Mu_E_c = energy_components_mueller(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn)
-    BBC1_tot,BBC1_Vee,BBC1_E_c = energy_components_bbc1(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,mol.nelec)
+    PYTHOONIC = False
+    GU_tot,GU_Vee,GU_E_c = energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHOONIC)
+    Mu_tot,Mu_Vee,Mu_E_c = energy_components_mueller(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHOONIC)
+    BBC1_tot,BBC1_Vee,BBC1_E_c = energy_components_bbc1(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,mol.nelec,PYTHOONIC)
 
 
     stats.append([dist, GU_E_c, Mu_E_c, BBC1_E_c, FCI_c, GU_tot, Mu_tot, BBC1_tot, FCI_tot, GU_Vee, Mu_Vee, BBC1_Vee,FCI_Vee]) 
