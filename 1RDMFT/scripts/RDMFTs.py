@@ -132,7 +132,7 @@ def ONERDMFT_BBC1(Fouridx, C, n, Na, Nb):
 
     return energy
 
-@jit(parallel=True)
+#@jit(parallel=True)
 def ONERDMFT_BBC2(Fouridx, C, n, Na, Nb):
     energy = 0
     M = C.shape[0]
@@ -159,7 +159,7 @@ def ONERDMFT_BBC2(Fouridx, C, n, Na, Nb):
 
     return  .5*energy
 
-@jit(parallel=True)
+#@jit(parallel=True)
 # this is only the correct BBC3 if there are no Bonds involved, without being able to predict bonds I dont know what to implement, read text leading up to Eq 3.10 in 10.1063/1.1906203 to understand this
 def ONERDMFT_BBC3(Fouridx, C, n, Na, Nb):
     energy = 0

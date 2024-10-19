@@ -21,7 +21,7 @@ for el in list(PSE.keys())[0:10]:
     """
     # this basis has 2 functions for Helium
     mol.basis = "ccpv5z"
-    #mol.basis = "sto-6g"
+    mol.basis = "sto-6g"
     mol.spin =  spins [PSE[el]-1 ] 
     mol.verbose=0
     mol.build()
