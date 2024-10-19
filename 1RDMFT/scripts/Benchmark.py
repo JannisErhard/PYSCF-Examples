@@ -89,8 +89,10 @@ for el in list(PSE.keys())[0:10]:
     GU_tot,GU_Vee,GU_E_c = energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHONIC)
     Mu_tot,Mu_Vee,Mu_E_c = energy_components_mueller(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHONIC)
     BBC1_tot, BBC1_Vee, BBC1_E_c = energy_components_bbc1(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,mol.nelec,PYTHONIC)
+    BBC2_tot, BBC2_Vee, BBC2_E_c = energy_components_bbc2(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,mol.nelec,PYTHONIC)
+    BBC3_tot, BBC3_Vee, BBC3_E_c = energy_components_bbc3(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,mol.nelec,PYTHONIC)
 
     #print(f"{el:2s}  {BBC1_E_c:1.6f} {BBC1_E_c_2:1.6f}  {BBC1_tot:3.6f} {BBC1_tot_2:3.6f} {BBC1_Vee:3.6f} {BBC1_Vee_2:3.6f}  ")
 
-    print(f"{el:2s} {GU_E_c:1.6f} {Mu_E_c:1.6f} {BBC1_E_c:1.6f} {FCI_c:1.6f} {GU_tot:3.6f} {Mu_tot:3.6f} {BBC1_tot:3.6f} {FCI_tot:3.6f} {GU_Vee:3.6f} {Mu_Vee:3.6f} {BBC1_Vee:3.6f} {FCI_Vee:3.6f}")
+    print(f"{el:2s} {GU_E_c:1.6f} {Mu_E_c:1.6f} {BBC1_E_c:1.6f} {FCI_c:1.6f} {GU_tot:3.6f} {Mu_tot:3.6f} {BBC1_tot:3.6f} {FCI_tot:3.6f} {GU_Vee:3.6f} {Mu_Vee:3.6f} {BBC1_Vee:3.6f} {FCI_Vee:3.6f}", flush=True)
     stats.append([el, GU_E_c, Mu_E_c, BBC1_E_c, FCI_c, GU_tot, Mu_tot, BBC1_tot, FCI_tot, GU_Vee, Mu_Vee, BBC1_Vee,FCI_Vee]) 

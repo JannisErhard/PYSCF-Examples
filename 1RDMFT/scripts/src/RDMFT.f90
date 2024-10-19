@@ -60,3 +60,13 @@ CALL Buijse_Baerends_Correction_Two(M,n,C,eri,na,nb,res)
 
 END SUBROUTINE
 
+SUBROUTINE WRAP_BBC_3(na,nb,n,C,eri,res,M)
+IMPLICIT NONE
+INTEGER,  INTENT(IN)  :: M,na,nb
+REAL(8),  INTENT(IN)  :: n(2*M), C(2*M,2*M), eri(M,M,M,M)
+REAL(8),  INTENT(OUT)  :: res
+
+CALL Buijse_Baerends_Correction_Three(M,n,C,eri,na,nb,res)
+
+END SUBROUTINE
+

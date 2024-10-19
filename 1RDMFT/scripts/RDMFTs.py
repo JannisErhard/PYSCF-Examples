@@ -232,3 +232,24 @@ def energy_components_bbc2(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,nelec,PYTH
     E_tot = h1 + Vee + E_nn
     E_c = E_tot - E_HF
     return E_tot, Vee, E_c
+
+def energy_components_bbc3(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,nelec,PYTHONIC):
+    n_a, n_b = nelec[0], nelec[1]
+    if PYTHONIC:
+        E_H = ONERDMFT_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
+        Mu_E_xc = ONERDMFT_Mueller_exchange_correlation_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
+        BBC1 = ONERDMFT_BBC1(eri, FCInaturalCTTE, FCIoccuE,n_a,n_b)
+        BBC2 = ONERDMFT_BBC2(eri, FCInaturalCTTE, FCIoccuE,n_a,n_b)
+        BBC3 = ONERDMFT_BBC3(eri, FCInaturalCTTE, FCIoccuE,n_a,n_b)
+
+    else:
+        E_H = RDMFT.wrap_hartree(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
+        Mu_E_xc = RDMFT.wrap_mu_xc(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
+        BBC1 = RDMFT.wrap_bbc_1(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
+        BBC2 = RDMFT.wrap_bbc_2(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
+        BBC3 = RDMFT.wrap_bbc_3(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
+
+    Vee = E_H + Mu_E_xc + BBC1 + BBC2 + BBC3
+    E_tot = h1 + Vee + E_nn
+    E_c = E_tot - E_HF
+    return E_tot, Vee, E_c
