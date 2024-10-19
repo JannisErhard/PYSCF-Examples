@@ -128,8 +128,8 @@ def ONERDMFT_BBC1(Fouridx, C, n, Na, Nb):
 
     return energy
 
-def energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHOONIC):
-    if PYTHOONIC:
+def energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHONIC):
+    if PYTHONIC:
         E_U = ONERDMFT_Umrigar_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
         GU_E_xc = ONERDMFT_Umrigar_exchange_correlation_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
     else:
@@ -140,21 +140,21 @@ def energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHOON
     E_c = E_tot - E_HF
     return E_tot, Vee, E_c 
 
-def energy_components_mueller(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHOONIC):
-    if PYTHOONIC:
-        E_H = RDMFT.wrap_hartree(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
-        Mu_E_xc = RDMFT.wrap_mu_xc(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
-    else:
+def energy_components_mueller(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHONIC):
+    if PYTHONIC:
         E_H = ONERDMFT_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
         Mu_E_xc = ONERDMFT_Mueller_exchange_correlation_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
+    else:
+        E_H = RDMFT.wrap_hartree(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
+        Mu_E_xc = RDMFT.wrap_mu_xc(FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
     Vee = E_H + Mu_E_xc
     E_tot = h1 + Vee + E_nn
     E_c = E_tot - E_HF
     return E_tot, Vee, E_c
 
-def energy_components_bbc1(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,nelec,PYTHOONIC):
+def energy_components_bbc1(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,nelec,PYTHONIC):
     n_a, n_b = nelec[0], nelec[1]
-    if PYTHOONIC:
+    if PYTHONIC:
         E_H = ONERDMFT_hartree_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
         Mu_E_xc = ONERDMFT_Mueller_exchange_correlation_energy_parallel(eri, FCInaturalCTTE, FCIoccuE)
         BBC1 = ONERDMFT_BBC1(eri, FCInaturalCTTE, FCIoccuE,n_a,n_b)
