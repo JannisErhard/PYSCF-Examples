@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/project/6006031/jerhard/Home_Brew/1RDMFTs/PYSCF-Examples/1RDMFT/scripts/calculations/./H2_Curve.py", line 6, in <module>
+    from RDMFTs import energy_components_umrigar, energy_components_mueller, energy_components_bbc1
+  File "/project/6006031/jerhard/Home_Brew/1RDMFTs/PYSCF-Examples/1RDMFT/scripts/calculations/../RDMFTs.py", line 5, in <module>
+    import RDMFT
+ModuleNotFoundError: No module named 'RDMFT'
