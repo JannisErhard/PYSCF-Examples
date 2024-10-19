@@ -158,7 +158,7 @@ energy = 0d0
   res = -1d0*energy
 end subroutine
 
-subroutine Buijse_Baerends_Correction_One(M,n,C,eri,na,nb,res)
+subroutine Buijse_Baerends_Correction_Two(M,n,C,eri,na,nb,res)
 use parallel
 IMPLICIT NONE
 
@@ -173,13 +173,13 @@ energy = 0d0
 !$omp private(a,b,mu,nu,kappa,lambda) &
 !$omp shared(M,n,C,eri,energy)
 !$omp do schedule(static,1) reduction(+:energy)
-  DO a=na+1,M
-    DO b=a+1,M
+  DO a=0,na
+    DO b=a+1,na
       DO mu=1,2*M
         DO nu=1,2*M
           DO kappa=1,2*M
             DO lambda=1,2*M
-              energy = energy+sqrt(n(a)*n(b))&
+              energy = energy+(sqrt(n(a)*n(b))-n(a)*n(b))&
                       *C(mu,a)*C(nu,b)*C(kappa,a)*C(lambda,b)&
                       *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
             ENDDO
@@ -195,13 +195,13 @@ energy = 0d0
 !$omp private(a,b,mu,nu,kappa,lambda) &
 !$omp shared(M,n,C,eri,energy)
 !$omp do schedule(static,1) reduction(+:energy)
-  DO a=M+nb+1,2*M
-    DO b=a+1,2*M
+  DO a=0,nb
+    DO b=a+1,nb
       DO mu=1,2*M
         DO nu=1,2*M
           DO kappa=1,2*M
             DO lambda=1,2*M
-              energy = energy+sqrt(n(a)*n(b))&
+              energy = energy+(sqrt(n(a)*n(b))-n(a)*n(b))&
                       *C(mu,a)*C(nu,b)*C(kappa,a)*C(lambda,b)&
                       *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
             ENDDO
