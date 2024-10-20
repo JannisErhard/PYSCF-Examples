@@ -1,7 +1,7 @@
 import numpy as np
 from pyscf import gto, scf, fci
 from tabulate import tabulate
-from RDMFTs import energy_components_umrigar, energy_components_mueller, energy_components_bbc1
+from RDMFTs import energy_components_umrigar, energy_components_mueller, energy_components_bbc1, energy_components_bbc2, energy_components_bbc3
 from utils import expand_matrix, Add_Block_Matrices 
 
 PSE = {'H': 1,'He': 2,'Li': 3,'Be': 4,'B': 5,'C': 6,'N': 7,'O': 8,'F': 9,'Ne': 10,\
@@ -21,7 +21,7 @@ for el in list(PSE.keys())[0:10]:
     """
     # this basis has 2 functions for Helium
     mol.basis = "ccpv5z"
-    mol.basis = "sto-6g"
+    #mol.basis = "sto-6g"
     mol.spin =  spins [PSE[el]-1 ] 
     mol.verbose=0
     mol.build()
