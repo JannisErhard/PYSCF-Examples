@@ -14,13 +14,13 @@ top = "El. Ec_{GU} Ec_{Mu} Ec_{FCI} Etot_{GU} Etot_{Mu} Etot_{FCI} Vee_{GU} Vee_
 
 top = "el. Ec_{GU} Ec_{Mu}  Ec_{BBC1} Ec_{FCI} Etot_{GU} Etot_{Mu} Etot_{BBC1} Etot_{FCI} Vee_{GU} Vee_{Mu} Vee_{BBC1} Vee_{FCI}"
 stats = []
-for el in list(PSE.keys())[0:10]:
+for el in list(PSE.keys())[0:4]:
     mol = gto.Mole()
     mol.atom = f"""
         {el}    0.    0.    0.
     """
     # this basis has 2 functions for Helium
-    mol.basis = "ccpv5z"
+    mol.basis = "ccpvdz"
     #mol.basis = "sto-6g"
     mol.spin =  spins [PSE[el]-1 ] 
     mol.verbose=0

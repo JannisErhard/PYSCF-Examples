@@ -170,7 +170,9 @@ def ONERDMFT_BBC3(Fouridx, C, n, Na, Nb):
             for nu in range(0,M):
                 for kappa in range(0,M):
                     for lamda in range(0,M):
-                        energy += (np.sqrt(n[a]*n[a])-(n[a]*n[a]))*C[mu,a]*C[nu,a]*C[kappa,a]*C[lamda,a]*Fouridx[mu%K,nu%K,kappa%K,lamda%K]
+                        energy += (np.sqrt(n[a]*n[a])-.5*(n[a]*n[a]))\
+                        *C[mu,a]*C[nu,a]*C[kappa,a]*C[lamda,a]\
+                        *Fouridx[mu%K,nu%K,kappa%K,lamda%K]
 
 
     return energy
@@ -248,6 +250,7 @@ def energy_components_bbc3(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,nelec,PYTH
         BBC1 = RDMFT.wrap_bbc_1(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
         BBC2 = RDMFT.wrap_bbc_2(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
         BBC3 = RDMFT.wrap_bbc_3(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
+        print(E_H, Mu_E_xc, BBC1, BBC2, BBC3)
 
     Vee = E_H + Mu_E_xc + BBC1 + BBC2 + BBC3
     E_tot = h1 + Vee + E_nn
