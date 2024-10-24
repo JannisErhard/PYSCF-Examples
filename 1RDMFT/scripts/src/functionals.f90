@@ -351,7 +351,7 @@ energy = 0d0
           DO kappa=1,2*M
             DO lambda=1,2*M
   DO a=1,2*M
-              energy = energy-.5d0*n(a)*n(a)&
+              energy = energy-.25d0*n(a)*n(a)& ! .25 to remove half hartree .5 to get accurate 0 Vee
                       *C(mu,a)*C(nu,a)*C(kappa,a)*C(lambda,a)&
                       *eri(MODULO(mu-1,M)+1,modulo(nu-1,M)+1,modulo(kappa-1,M)+1,modulo(lambda-1,M)+1)
 

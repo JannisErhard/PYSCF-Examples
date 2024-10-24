@@ -250,7 +250,6 @@ def energy_components_bbc3(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,nelec,PYTH
         BBC1 = RDMFT.wrap_bbc_1(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
         BBC2 = RDMFT.wrap_bbc_2(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
         BBC3 = RDMFT.wrap_bbc_3(n_a,n_b,FCIoccuE,FCInaturalCTTE,eri,eri.shape[0])
-        print(E_H, Mu_E_xc, BBC1, BBC2, BBC3)
 
     Vee = E_H + Mu_E_xc + BBC1 + BBC2 + BBC3
     E_tot = h1 + Vee + E_nn
