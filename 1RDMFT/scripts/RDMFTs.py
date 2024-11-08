@@ -1,11 +1,11 @@
 import numpy as np
-#from numba import prange, jit, njit
+from numba import prange, jit, njit
 import sys
 sys.path.insert(0, './build/')
 import RDMFT
 
 # for jit and prange
-#@jit(nopython=True, parallel=True)
+@jit(nopython=True, parallel=True)
 def ONERDMFT_hartree_energy_parallel(Fouridx, C, n):
     energy = 0
     M = C.shape[0]
@@ -21,7 +21,7 @@ def ONERDMFT_hartree_energy_parallel(Fouridx, C, n):
     return 1/2.*energy
 
 # for spinorbitals
-#@jit(nopython=True, parallel=True)
+@jit(nopython=True, parallel=True)
 def ONERDMFT_Umrigar_hartree_energy_parallel(Fouridx, C, n):
     energy = 0
     M = C.shape[0]
@@ -35,7 +35,7 @@ def ONERDMFT_Umrigar_hartree_energy_parallel(Fouridx, C, n):
                             energy += n[a]*n[b]*C[mu,a]*C[nu,a]*C[kappa,b]*C[lamda,b]*Fouridx[mu%K,nu%K,kappa%K,lamda%K]
 
     return energy
-#@jit(nopython=True, parallel=True)
+@jit(nopython=True, parallel=True)
 def ONERDMFT_Umrigar_exchange_correlation_energy_parallel(Fouridx, C, n):
     energy = 0
     M = C.shape[0]
@@ -59,7 +59,7 @@ def ONERDMFT_Umrigar_exchange_correlation_energy_parallel(Fouridx, C, n):
 
     return -1/2.*energy
 
-#@jit(parallel=True)
+@jit(parallel=True)
 def ONERDMFT_exchange_energy_parallel(Fouridx, C, n):
     energy = 0
     M = C.shape[0]
@@ -82,7 +82,7 @@ def ONERDMFT_exchange_energy_parallel(Fouridx, C, n):
 
     return -1/2.*energy
 
-#@jit(parallel=True)
+@jit(parallel=True)
 def ONERDMFT_Mueller_exchange_correlation_energy_parallel(Fouridx, C, n):
     energy = 0
     M = C.shape[0]
@@ -105,7 +105,7 @@ def ONERDMFT_Mueller_exchange_correlation_energy_parallel(Fouridx, C, n):
 
     return -1/2.*energy
 
-#@jit(parallel=True)
+@jit(parallel=True)
 def ONERDMFT_BBC1(Fouridx, C, n, Na, Nb):
     energy = 0
     M = C.shape[0]
@@ -129,10 +129,10 @@ def ONERDMFT_BBC1(Fouridx, C, n, Na, Nb):
                             *C[mu,a]*C[nu,b]*C[kappa,a]*C[lamda,b]\
                             *Fouridx[mu%K,nu%K,kappa%K,lamda%K]
 
-
+    print(energy)
     return energy
 
-#@jit(parallel=True)
+@jit(parallel=True)
 def ONERDMFT_BBC2(Fouridx, C, n, Na, Nb):
     energy = 0
     M = C.shape[0]
@@ -159,7 +159,7 @@ def ONERDMFT_BBC2(Fouridx, C, n, Na, Nb):
 
     return  .5*energy
 
-#@jit(parallel=True)
+@jit(parallel=True)
 # this is only the correct BBC3 if there are no Bonds involved, without being able to predict bonds I dont know what to implement, read text leading up to Eq 3.10 in 10.1063/1.1906203 to understand this
 def ONERDMFT_BBC3(Fouridx, C, n, Na, Nb):
     energy = 0
