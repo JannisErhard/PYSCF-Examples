@@ -14,13 +14,13 @@ top = "El. Ec_{GU} Ec_{Mu} Ec_{FCI} Etot_{GU} Etot_{Mu} Etot_{FCI} Vee_{GU} Vee_
 
 top = "el. Ec_{GU} Ec_{Mu}  Ec_{BBC1} Ec_{FCI} Etot_{GU} Etot_{Mu} Etot_{BBC1} Etot_{FCI} Vee_{GU} Vee_{Mu} Vee_{BBC1} Vee_{FCI}"
 stats = []
-for el in list(PSE.keys())[0:4]:
+for el in list(PSE.keys())[3]:
     mol = gto.Mole()
     mol.atom = f"""
         {el}    0.    0.    0.
     """
     # this basis has 2 functions for Helium
-    mol.basis = "ccpvdz"
+    mol.basis = "aug-cc-pvqz"
     #mol.basis = "sto-6g"
     mol.spin =  spins [PSE[el]-1 ] 
     mol.verbose=0
@@ -85,7 +85,7 @@ for el in list(PSE.keys())[0:4]:
     FCI_Vee = FCI_tot - h1
 
 # calling 1RDMFT energy functions
-    PYTHONIC=True
+    PYTHONIC=False 
     GU_tot,GU_Vee,GU_E_c = energy_components_umrigar(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHONIC)
     Mu_tot,Mu_Vee,Mu_E_c = energy_components_mueller(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,PYTHONIC)
     BBC1_tot, BBC1_Vee, BBC1_E_c = energy_components_bbc1(eri, FCInaturalCTTE, FCIoccuE,h1,E_HF,E_nn,mol.nelec,PYTHONIC)
