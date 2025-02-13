@@ -11,8 +11,8 @@ def HF_U2RDM(n_a, n_b, M):
 
     Returns
     -------
-    rho : np.ndarray
-        2RDM
+    TWORDM : tupel of 3 np.ndarrays
+        2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
     # alpha alpha 
@@ -54,8 +54,8 @@ def MU_U2RDM(n_a, n_b, M):
 
     Returns
     -------
-    rho : np.ndarray
-        2RDM
+    TWORDM : tupel of 3 np.ndarrays
+        2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
     # alpha alpha 
@@ -90,14 +90,14 @@ def GU_U2RDM(n_a, n_b, M):
     ''' Compute 2 RDMFTs in Natural Orbital basis for Goedecker Umrigar approximation
     Parameters
     ----------
-    n : np.ndarray
-        occupation numbers of a spin restricted 1dm, they lie in [0,2]
+    n_a, n_b  : np.ndarray
+        occupation numbers of a spin unrestricted 1dm, they lie in [0,1]
     M : integer 
         basis set size
     Returns
     -------
-    rho : np.ndarray
-        2RDM
+    TWORDM : tupel of 3 np.ndarrays
+        2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''    
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
     for i in range(0,M):
@@ -128,19 +128,21 @@ def GU_U2RDM(n_a, n_b, M):
     return TWORDM
 
 def BBC1_U2RDM(n_a, n_b, M, N_a, N_b):
-    ''' Compute 2 RDMFTs in Natural Orbital basis for Goedecker Umrigar approximation
+    ''' Compute 2 RDMFTs in Natural Orbital basis for BBC1 approximation
     Parameters
     ----------
-    n : np.ndarray
-        occupation numbers of a spin restricted 1dm, they lie in [0,2]
+    n_a, n_b  : np.ndarray
+        occupation numbers of a spin unrestricted 1dm, they lie in [0,1]
+    N_a, N_b : integer
+        number of "strongly" occupied orbitals in alpha and beta channel
     M : integer 
         basis set size
     N : integer 
         number of strongly occupied (close to 1) orbitals
     Returns
     -------
-    rho : np.ndarray
-        2RDM
+    TWORDM : tupel of 3 np.ndarrays
+        2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''    
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
     for i in range(0,M):
@@ -184,7 +186,7 @@ def MU_2RDM(n, M):
 
     Returns
     -------
-    rho : np.ndarray
+    TWORDM : np.ndarray
         2RDM
     '''
     TWORDM = np.zeros((M,M,M,M))
@@ -208,7 +210,7 @@ def GU_2RDM(n, M):
         basis set size
     Returns
     -------
-    rho : np.ndarray
+    TWORDM : np.ndarray
         2RDM
     '''    
     TWORDM = np.zeros((M,M,M,M))
@@ -226,7 +228,7 @@ def GU_2RDM(n, M):
     return TWORDM
 
 def BBC1_2RDM(n, M, N):
-    ''' Compute 2 RDMFTs in Natural Orbital basis for Goedecker Umrigar approximation
+    ''' Compute 2 RDMFTs in Natural Orbital basis for BBC1 approximation
     Parameters
     ----------
     n : np.ndarray
@@ -237,7 +239,7 @@ def BBC1_2RDM(n, M, N):
         number of strongly occupied (close to 1) orbitals
     Returns
     -------
-    rho : np.ndarray
+    TWORDM : np.ndarray
         2RDM
     '''    
     TWORDM = np.zeros((M,M,M,M))
@@ -255,7 +257,7 @@ def BBC1_2RDM(n, M, N):
     return TWORDM
 
 def HF_2RDM(n, M):
-    ''' Compute 2 RDMFTs in Natural Orbital basis for Mueller approximation
+    ''' Compute 2 RDMFTs in Natural Orbital basis for Hartree-Fock approximation
     Parameters
     ----------
     n : np.ndarray
@@ -265,7 +267,7 @@ def HF_2RDM(n, M):
 
     Returns
     -------
-    rho : np.ndarray
+    TWORDM : np.ndarray
         2RDM
     '''
     TWORDM = np.zeros((M,M,M,M))
