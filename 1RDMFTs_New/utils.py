@@ -1,6 +1,28 @@
 import numpy as np
 
-def spectral_clean(dm1, M):
+def spectral_clean(dm1):
+    '''
+    Parameters 
+    ----------
+    dm1 : list of numpy.ndarray
+    A list containing two (N, N) density matrices:
+    - dm1[0]: Spin-up density matrix (N x N)
+    - dm1[1]: Spin-down density matrix (N x N)
+    Each matrix represents the electron density in a given basis.
+
+    Returns
+    -------    
+    occ_a : numpy.ndarray
+    Eigenvalues (occupations) of the spin-up density matrix, sorted in descending order.
+    Any negative eigenvalues are set to zero.
+    occ_b : numpy.ndarray
+    Eigenvalues (occupations) of the spin-down density matrix, sorted in descending order.
+    Any negative eigenvalues are set to zero.
+    C_NAO_a : numpy.ndarray
+    Eigenvectors (Natural Atomic Orbitals) corresponding to occ_a, ordered accordingly.
+    C_NAO_b : numpy.ndarray
+    Eigenvectors (Natural Atomic Orbitals) corresponding to occ_b, ordered accordingly.
+    '''
     
     occ_a, C_NAO_a = np.linalg.eigh(dm1[0])
     occ_b, C_NAO_b = np.linalg.eigh(dm1[1])

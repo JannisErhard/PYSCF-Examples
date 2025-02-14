@@ -15,7 +15,7 @@ def HF_U2RDM(n_a, n_b, M):
         2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
-    # alpha alpha 
+    # alpha alpha alpha alpha 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
@@ -31,7 +31,7 @@ def HF_U2RDM(n_a, n_b, M):
                 for l in range(0,M):
                     if i==j and k==l:
                         TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
-    # beta beta 
+    # beta beta beta beta
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
@@ -58,7 +58,7 @@ def MU_U2RDM(n_a, n_b, M):
         2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
-    # alpha alpha 
+    # alpha alpha alpha alpha 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
@@ -100,6 +100,7 @@ def GU_U2RDM(n_a, n_b, M):
         2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''    
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
+    # alpha alpha alpha alpha 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
@@ -145,6 +146,7 @@ def BBC1_U2RDM(n_a, n_b, M, N_a, N_b):
         2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
     '''    
     TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
+    # alpha alpha alpha alpha 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
