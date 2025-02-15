@@ -230,6 +230,67 @@ def BBC2_U2RDM(n_a, n_b, M, N_a, N_b):
                     
     return TWORDM
 
+def BBC3_U2RDM(n_a, n_b, M, N_a, N_b,t_a,t_b):
+    ''' Compute 2 RDMFTs in Natural Orbital basis for BBC3 approximation
+    Parameters
+    ----------
+    n_a, n_b  : np.ndarray
+        occupation numbers of a spin unrestricted 1dm, they lie in [0,1]
+    N_a, N_b : integer
+        number of "strongly" occupied orbitals in alpha and beta channel
+    M : integer 
+        basis set size
+    N : integer 
+        number of strongly occupied (close to 1) orbitals
+    t_a, t_b : integer 
+        the index of the antibonding orbital
+    Returns
+    -------
+    TWORDM : tupel of 3 np.ndarrays
+        2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
+    '''   
+    TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
+    for i in range(0,M):
+        for j in range(0,M):
+            for k in range(0,M):
+                for l in range(0,M):
+                    if i==j and k==l:
+                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[k]
+                    if i==l and k==j :
+                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[k])
+                    if i==l and k==j and (i >= N_a and k >= N_a) and l!=k :
+                        TWORDM[0][i,j,k,l] += 2*np.sqrt(n_a[i]*n_a[k])
+                    if i==l and k==j and (i < N_a and k < N_a) and l!=k :
+                        TWORDM[0][i,j,k,l] += np.sqrt(n_a[i]*n_a[k])-.5*n_a[i]*n_a[k]
+                    if i==j and i==k and i==l and i != N_a-1 and i != t_a:
+                        TWORDM[2][i,j,k,l] = -n_a[i]**2+n_a[i]
+
+    for i in range(0,M):
+        for j in range(0,M):
+            for k in range(0,M):
+                for l in range(0,M):
+                    if i==j and k==l:
+                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
+
+    for i in range(0,M):
+        for j in range(0,M):
+            for k in range(0,M):
+                for l in range(0,M):
+                    if i==j and k==l:
+                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[k]
+                    if i==l and k==j :
+                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[k])
+                    if i==l and k==j and (i >= N_b and k >= N_b) and l!=k :
+                        TWORDM[2][i,j,k,l] += 2*np.sqrt(n_b[i]*n_b[k])
+                    if i==l and k==j and (i < N_b and k < N_b) and l!=k :
+                        TWORDM[2][i,j,k,l] += np.sqrt(n_b[i]*n_b[k])-.5*n_b[i]*n_b[k]
+                    if i==j and i==k and i==l and i != N_b-1 : #and i != t_b: #to extend this it needs 
+                        TWORDM[2][i,j,k,l] = -n_b[i]**2+n_b[i]
+
+
+                    
+    return TWORDM
+
 def MU_2RDM(n, M):
     ''' Compute 2 RDMFTs in Natural Orbital basis for Mueller approximation
     Parameters
@@ -352,5 +413,24 @@ def BBC2_2RDM(n, M, N):
         2RDM
     '''    
     TWORDM = BBC2_U2RDM(n*0.5, n*0.5, M, N, N)
+                    
+    return TWORDM[0]+2*TWORDM[1]+TWORDM[2]
+
+def BBC3_2RDM(n, M, N, t):
+    ''' Compute 2 RDMFTs in Natural Orbital basis for BBC2 approximation
+    Parameters
+    ----------
+    n : np.ndarray
+        occupation numbers of a spin restricted 1dm, they lie in [0,2]
+    M : integer 
+        basis set size
+    N : integer 
+        number of strongly, double-occupied (close to 2) spatial-orbitals
+    Returns
+    -------
+    TWORDM : np.ndarray
+        2RDM
+    '''    
+    TWORDM = BBC3_U2RDM(n*0.5, n*0.5, M, N, N, t, t)
                     
     return TWORDM[0]+2*TWORDM[1]+TWORDM[2]
