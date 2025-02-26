@@ -1,74 +1,98 @@
 import numpy as np
 
 def PNOF2(n_a, n_b, M, N_a, N_b):
-    # make Delta and Pi specific to PNOF2
-    Delta = np.zeros((M,M))
-    Pi = np.zeros((M,M))
-
-    S_F = 0.0
-    for i in range(0,N_a):
-        S_F += max(1.0-n_a[i],0)
-    print(S_F, (1.0-S_F)/S_F)
-    S_F = 0.0
-    for i in range(N_a,M):
-        S_F += n_a[i]
-    print(S_F, (1.0-S_F)/S_F)
-
-
+    """
+    Compute the 2-RDM (Two-Particle Reduced Density Matrix) elements using the PNOF2 method.
     
-    for i in range(0,M):
-        for j in range(0,M):
+    Parameters:
+    n_a : array_like
+        Occupation numbers for alpha spin orbitals.
+    n_b : array_like
+        Occupation numbers for beta spin orbitals.
+    M : int
+        Number of spatial orbitals.
+    N_a : int
+        Number of alpha electrons.
+    N_b : int
+        Number of beta electrons.
+    
+    Returns:
+    TWORDM : tuple of numpy arrays
+        Tuple containing three 4-dimensional numpy arrays representing different spin components.
+    """
+    # Initialize Delta and Pi matrices with zeros
+    Delta = np.zeros((M, M))
+    Pi = np.zeros((M, M))
+    
+    # Compute the sum of (1 - n_a) for the first N_a orbitals
+    S_F = sum(max(1.0 - n_a[i], 0) for i in range(N_a))
+    
+    
+    # Compute Delta and Pi matrices based on orbital indices
+    for i in range(M):
+        for j in range(M):
             if i != j:
                 if i < N_a and j < N_b:
-                    Delta[i,j] = (max(1.0-n_a[i],0))*(max(1.0-n_b[j],0))
-                    Pi[i,j] = np.sqrt(n_a[i]*n_b[j])+np.sqrt((max(1.0-n_a[i],0))*(max(1.0-n_b[j],0)))+n_a[i]*n_b[j]-Delta[i,j]
-                if i < N_a and j >= N_b:
-                    Delta[i,j] = (max(1.0-n_a[i],0))*(n_b[j])*(1.0-S_F)/S_F
-                    Pi[i,j] = np.sqrt(n_a[i]*n_b[j])-np.sqrt((max(1.0-n_a[i],0))*(n_b[j]))+n_a[i]*n_b[j]-Delta[i,j]
-                if i >= N_a and j < N_b:
-                    Delta[i,j] = (max(1.0-n_b[j],0))*(n_a[i])*(1.0-S_F)/S_F
-                    Pi[i,j] = np.sqrt(n_a[i]*n_b[j])-np.sqrt((n_a[i])*(max(1.0-n_b[j],0)))+n_a[i]*n_b[j]-Delta[i,j]
-                if i >= N_a and j >= N_b:
-                    Delta[i,j] = n_a[i]*n_b[j]
-                    Pi[i,j] = n_a[i]*n_b[j]-Delta[i,j]
+                    Delta[i, j] = max(1.0 - n_a[i], 0) * max(1.0 - n_b[j], 0)
+                    Pi[i, j] = (np.sqrt(n_a[i] * n_b[j]) +
+                                np.sqrt(Delta[i, j]) +
+                                n_a[i] * n_b[j] - Delta[i, j])
+                elif i < N_a and j >= N_b:
+                    Delta[i, j] = max(1.0 - n_a[i], 0) * n_b[j] * (1.0 - S_F) / S_F
+                    Pi[i, j] = (np.sqrt(n_a[i] * n_b[j]) -
+                                np.sqrt(Delta[i, j]) +
+                                n_a[i] * n_b[j] - Delta[i, j])
+                elif i >= N_a and j < N_b:
+                    Delta[i, j] = max(1.0 - n_b[j], 0) * n_a[i] * (1.0 - S_F) / S_F
+                    Pi[i, j] = (np.sqrt(n_a[i] * n_b[j]) -
+                                np.sqrt(Delta[i, j]) +
+                                n_a[i] * n_b[j] - Delta[i, j])
+                else:  # i >= N_a and j >= N_b
+                    Delta[i, j] = n_a[i] * n_b[j]
+                    Pi[i, j] = n_a[i] * n_b[j] - Delta[i, j]
             else:
-                Delta[i,i] = n_a[i]**2
-                Pi[i,i] = n_a[i]
-
-
+                # Diagonal elements
+                Delta[i, i] = n_a[i] ** 2
+                Pi[i, i] = n_a[i]
     
-    TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
-    # alpha alpha alpha alpha 
-    for i in range(0,M):
-        for j in range(0,M):
-            for k in range(0,M):
-                for l in range(0,M):
-                    if i==k and j==l:
-                        TWORDM[0][i,j,k,l] += n_a[i]*n_a[j] - Delta[i,j]
-                    if i==l and k==j:
-                        TWORDM[0][i,j,k,l] += -n_a[i]*n_a[j] + Delta[i,j]
-    # alpha beta and beta alpha
-    for i in range(0,M):
-        for j in range(0,M):
-            for k in range(0,M):
-                for l in range(0,M):
-                    if i==k and j==l:
-                        TWORDM[1][i,j,k,l] += n_a[i]*n_b[j] - Delta[i,j] 
-                    if i==j and k==l:
-                        TWORDM[1][i,j,k,l] +=  Pi[i,k]
-    # beta beta beta beta
-    for i in range(0,M):
-        for j in range(0,M):
-            for k in range(0,M):
-                for l in range(0,M):
-                    if i==k and j==l:
-                        TWORDM[2][i,j,k,l] += n_b[i]*n_b[j] - Delta[i,j]
-                    if i==l and k==j:
-                        TWORDM[2][i,j,k,l] += -n_b[i]*n_b[j] + Delta[i,j]
-#                    print(TWORDM[2][i,j,k,l])
-
+    # Initialize the 2-RDM tensor (3 components: alpha-alpha, alpha-beta, beta-beta)
+    TWORDM = (np.zeros((M, M, M, M)),
+              np.zeros((M, M, M, M)),
+              np.zeros((M, M, M, M)))
+    
+    # Compute alpha-alpha-alpha-alpha component
+    for i in range(M):
+        for j in range(M):
+            for k in range(M):
+                for l in range(M):
+                    if i == k and j == l:
+                        TWORDM[0][i, j, k, l] += n_a[i] * n_a[j] - Delta[i, j]
+                    if i == l and k == j:
+                        TWORDM[0][i, j, k, l] += -n_a[i] * n_a[j] + Delta[i, j]
+    
+    # Compute alpha-beta and beta-alpha components
+    for i in range(M):
+        for j in range(M):
+            for k in range(M):
+                for l in range(M):
+                    if i == k and j == l:
+                        TWORDM[1][i, j, k, l] += n_a[i] * n_b[j] - Delta[i, j]
+                    if i == j and k == l:
+                        TWORDM[1][i, j, k, l] += Pi[i, k]
+    
+    # Compute beta-beta-beta-beta component
+    for i in range(M):
+        for j in range(M):
+            for k in range(M):
+                for l in range(M):
+                    if i == k and j == l:
+                        TWORDM[2][i, j, k, l] += n_b[i] * n_b[j] - Delta[i, j]
+                    if i == l and k == j:
+                        TWORDM[2][i, j, k, l] += -n_b[i] * n_b[j] + Delta[i, j]
+    
     return TWORDM
-    
+
+
 def PNOF4(n_a, n_b, M, N_a, N_b):
     # make Delta and Pi specific to PNOF2
     Delta = np.zeros((M,M))
