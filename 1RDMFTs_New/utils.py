@@ -53,6 +53,15 @@ def twoDM_Eigvals(dm2):
     FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = np.transpose(dm2[2], (0, 2, 1, 3))
     return np.linalg.eigvalsh(np.reshape(FULL_2dm, ((2*N)**2, (2*N)**2)))
 
+def twoDM_Eigvals_phys(dm2):
+    N = dm2[0].shape[0]
+    FULL_2dm = np.zeros((dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2))
+    FULL_2dm[0:N,0:N,0:N,0:N]  =        dm2[0] 
+    FULL_2dm[0:N,N:2*N,0:N,N:2*N] =     dm2[1]
+    FULL_2dm[N:2*N,0:N,N:2*N,0:N] =     dm2[1]
+    FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = dm2[2]
+    return np.linalg.eigvalsh(np.reshape(FULL_2dm, ((2*N)**2, (2*N)**2)))
+
 def R_spectral_clean(dm1, M):
     
     occ_a, C_NAO_a = np.linalg.eigh(dm1)
@@ -72,6 +81,15 @@ def DM2_DiagSum(dm2):
     FULL_2dm[0:N,N:2*N,0:N,N:2*N] = np.transpose(dm2[1], (0, 2, 1, 3))
     FULL_2dm[N:2*N,0:N,N:2*N,0:N] = np.transpose(dm2[1], (0, 2, 1, 3))
     FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = np.transpose(dm2[2], (0, 2, 1, 3))
+    return np.trace(np.reshape(FULL_2dm, (4*N**2, 4*N**2)))
+
+def DM2_DiagSum_phys(dm2):
+    N = dm2[0].shape[0]
+    FULL_2dm = np.zeros((dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2))
+    FULL_2dm[0:N,0:N,0:N,0:N]  = dm2[0]
+    FULL_2dm[0:N,N:2*N,0:N,N:2*N] = dm2[1]
+    FULL_2dm[N:2*N,0:N,N:2*N,0:N] = dm2[1]
+    FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = dm2[2]
     return np.trace(np.reshape(FULL_2dm, (4*N**2, 4*N**2)))
 
 def BST_FIDX(FIDX, C_NAO_a, C_NAO_b):
