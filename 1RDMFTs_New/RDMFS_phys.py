@@ -101,11 +101,6 @@ def PNOF4(n_a, n_b, M, N_a, N_b):
     S_F = 0.0
     for i in range(0,N_a):
         S_F += max(1.0-n_a[i],0)
-    print(S_F, (1.0-S_F)/S_F)
-    S_F = 0.0
-    for i in range(N_a,M):
-        S_F += n_a[i]
-    print(S_F, (1.0-S_F)/S_F)
 
 
     
@@ -162,7 +157,7 @@ def PNOF4(n_a, n_b, M, N_a, N_b):
 
     return TWORDM
     
-def HF_U2RDM_phys(n_a, n_b, M):
+def HF_U2RDM(n_a, n_b, M):
     ''' Compute 2 RDMFTs in Natural Spin Orbital basis for Mueller approximation
     Parameters 
     ----------
@@ -211,48 +206,6 @@ def HF_U2RDM_phys(n_a, n_b, M):
             
     
 
-def HF_U2RDM(n_a, n_b, M):
-    ''' Compute 2 RDMFTs in Natural Spin Orbital basis for Mueller approximation
-    Parameters 
-    ----------
-    n_a, n_b  : np.ndarray
-        occupation numbers of a spin unrestricted 1dm, they lie in [0,1]
-    M : integer 
-        basis set size
-
-    Returns
-    -------
-    TWORDM : tupel of 3 np.ndarrays
-        2RDMs alpha,alpha-block alpha,beta-block and beta,beta block  
-    '''
-    TWORDM = (np.zeros((M,M,M,M)), np.zeros((M,M,M,M)), np.zeros((M,M,M,M)))
-    # alpha alpha alpha alpha 
-    for i in range(0,M):
-        for j in range(0,M):
-            for k in range(0,M):
-                for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[k]
-                    if i==l and k==j:
-                        TWORDM[0][i,j,k,l] -= n_a[i]*n_a[k]
-    # alpha beta and beta alpha
-    for i in range(0,M):
-        for j in range(0,M):
-            for k in range(0,M):
-                for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
-    # beta beta beta beta
-    for i in range(0,M):
-        for j in range(0,M):
-            for k in range(0,M):
-                for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[k]
-                    if i==l and k==j:
-                        TWORDM[2][i,j,k,l] -= n_b[i]*n_b[k]
-
-    return TWORDM
 
 def MU_U2RDM(n_a, n_b, M):
     ''' Compute 2 RDMFTs in Natural Spin Orbital basis for Mueller approximation
@@ -274,26 +227,26 @@ def MU_U2RDM(n_a, n_b, M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[k]
+                    if i==k and j==l:
+                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[j]
                     if i==l and k==j:
-                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[k])
+                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[j])
     # alpha beta and beta alpha
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[j]
     # beta beta 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[j]
                     if i==l and k==j:
-                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[k])
+                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[j])
 
     return TWORDM
 
@@ -316,25 +269,25 @@ def GU_U2RDM(n_a, n_b, M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l and j!=k:
-                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[k]
+                    if i==k and j==l and j!=k:
+                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[j]
                     if i==l and k==j and l!=k :
-                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[k])
+                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[j])
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[j]
 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l and j!=k:
-                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[k]
+                    if i==k and j==l and j!=k:
+                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[j]
                     if i==l and k==j and l!=k :
-                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[k])
+                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[j])
 
 
     return TWORDM
@@ -361,29 +314,29 @@ def BBC1_U2RDM(n_a, n_b, M, N_a, N_b):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[k]
+                    if i==k and j==l:
+                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[j]
                     if i==l and k==j :
-                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[k])
-                    if i==l and k==j and (i >= N_a and k >= N_a) and l!=k :
-                        TWORDM[0][i,j,k,l] += 2*np.sqrt(n_a[i]*n_a[k])
+                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[j])
+                    if i==l and k==j and (i >= N_a and j >= N_a) and l!=k :
+                        TWORDM[0][i,j,k,l] += 2*np.sqrt(n_a[i]*n_a[j])
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[j]
 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[j]
                     if i==l and k==j :
-                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[k])
-                    if i==l and k==j and (i >= N_b and k >= N_b) and l!=k :
-                        TWORDM[2][i,j,k,l] += 2*np.sqrt(n_b[i]*n_b[k])
+                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[j])
+                    if i==l and k==j and (i >= N_b and j >= N_b) and l!=k :
+                        TWORDM[2][i,j,k,l] += 2*np.sqrt(n_b[i]*n_b[j])
                     
     return TWORDM
 
@@ -409,34 +362,34 @@ def BBC2_U2RDM(n_a, n_b, M, N_a, N_b):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[k]
+                    if i==k and j==l:
+                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[j]
                     if i==l and k==j :
-                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[k])
-                    if i==l and k==j and (i >= N_a and k >= N_a) and l!=k :
-                        TWORDM[0][i,j,k,l] += 2*np.sqrt(n_a[i]*n_a[k])
-                    if i==l and k==j and (i < N_a and k < N_a) and l!=k :
-                        TWORDM[0][i,j,k,l] += np.sqrt(n_a[i]*n_a[k])-.5*n_a[i]*n_a[k]
+                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[j])
+                    if i==l and k==j and (i >= N_a and j >= N_a) and l!=k :
+                        TWORDM[0][i,j,k,l] += 2*np.sqrt(n_a[i]*n_a[j])
+                    if i==l and k==j and (i < N_a and j < N_a) and l!=k :
+                        TWORDM[0][i,j,k,l] += np.sqrt(n_a[i]*n_a[j])-.5*n_a[i]*n_a[j]
 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[j]
 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[j]
                     if i==l and k==j :
-                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[k])
-                    if i==l and k==j and (i >= N_b and k >= N_b) and l!=k :
-                        TWORDM[2][i,j,k,l] += 2*np.sqrt(n_b[i]*n_b[k])
-                    if i==l and k==j and (i < N_b and k < N_b) and l!=k :
-                        TWORDM[2][i,j,k,l] += np.sqrt(n_b[i]*n_b[k])-.5*n_b[i]*n_b[k]
+                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[j])
+                    if i==l and k==j and (i >= N_b and j >= N_b) and l!=k :
+                        TWORDM[2][i,j,k,l] += 2*np.sqrt(n_b[i]*n_b[j])
+                    if i==l and k==j and (i < N_b and j < N_b) and l!=k :
+                        TWORDM[2][i,j,k,l] += np.sqrt(n_b[i]*n_b[j])-.5*n_b[i]*n_b[j]
 
                     
     return TWORDM
@@ -465,14 +418,14 @@ def BBC3_U2RDM(n_a, n_b, M, N_a, N_b,t_a,t_b):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[k]
+                    if i==k and j==l:
+                        TWORDM[0][i,j,k,l] = n_a[i]*n_a[j]
                     if i==l and k==j :
-                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[k])
+                        TWORDM[0][i,j,k,l] -= np.sqrt(n_a[i]*n_a[j])
                     if i==l and k==j and (i >= N_a and k >= N_a) and l!=k :
-                        TWORDM[0][i,j,k,l] += 2*np.sqrt(n_a[i]*n_a[k])
+                        TWORDM[0][i,j,k,l] += 2*np.sqrt(n_a[i]*n_a[j])
                     if i==l and k==j and (i < N_a and k < N_a) and l!=k :
-                        TWORDM[0][i,j,k,l] += np.sqrt(n_a[i]*n_a[k])-.5*n_a[i]*n_a[k]
+                        TWORDM[0][i,j,k,l] += np.sqrt(n_a[i]*n_a[j])-.5*n_a[i]*n_a[j]
                     if i==j and i==k and i==l and i != N_a-1 and i != t_a:
                         TWORDM[2][i,j,k,l] = -n_a[i]**2+n_a[i]
 
@@ -480,21 +433,21 @@ def BBC3_U2RDM(n_a, n_b, M, N_a, N_b,t_a,t_b):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[1][i,j,k,l] = n_a[i]*n_b[j]
 
     for i in range(0,M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[k]
+                    if i==k and j==l:
+                        TWORDM[2][i,j,k,l] = n_b[i]*n_b[j]
                     if i==l and k==j :
-                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[k])
+                        TWORDM[2][i,j,k,l] -= np.sqrt(n_b[i]*n_b[j])
                     if i==l and k==j and (i >= N_b and k >= N_b) and l!=k :
-                        TWORDM[2][i,j,k,l] += 2*np.sqrt(n_b[i]*n_b[k])
+                        TWORDM[2][i,j,k,l] += 2*np.sqrt(n_b[i]*n_b[j])
                     if i==l and k==j and (i < N_b and k < N_b) and l!=k :
-                        TWORDM[2][i,j,k,l] += np.sqrt(n_b[i]*n_b[k])-.5*n_b[i]*n_b[k]
+                        TWORDM[2][i,j,k,l] += np.sqrt(n_b[i]*n_b[j])-.5*n_b[i]*n_b[j]
                     if i==j and i==k and i==l and i != N_b-1 : #and i != t_b: #to extend this it needs 
                         TWORDM[2][i,j,k,l] = -n_b[i]**2+n_b[i]
 
@@ -521,10 +474,10 @@ def MU_2RDM(n, M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[i,j,k,l] = 4*n[i]/2*n[k]/2
+                    if i==k and j==l:
+                        TWORDM[i,j,k,l] = 4*n[i]/2*n[j]/2
                     if i==l and k==j:
-                        TWORDM[i,j,k,l] -= 2*np.sqrt(n[i]/2*n[k]/2)
+                        TWORDM[i,j,k,l] -= 2*np.sqrt(n[i]/2*n[j]/2)
     return TWORDM
 
 def GU_2RDM(n, M):
@@ -545,12 +498,12 @@ def GU_2RDM(n, M):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l and j!=k:
-                        TWORDM[i,j,k,l] = 4*n[i]/2*n[k]/2
+                    if i==k and j==l and j!=k:
+                        TWORDM[i,j,k,l] = 4*n[i]/2*n[j]/2
                     if i==l and k==j and l!=k :
-                        TWORDM[i,j,k,l] -= 2*np.sqrt(n[i]/2*n[k]/2)
+                        TWORDM[i,j,k,l] -= 2*np.sqrt(n[i]/2*n[j]/2)
                     if i==j and k==l and j==k:
-                         TWORDM[i,j,k,l] = 2*n[i]/2*n[k]/2 
+                         TWORDM[i,j,k,l] = 2*n[i]/2*n[j]/2 
 
     return TWORDM
 
@@ -574,12 +527,12 @@ def BBC1_2RDM(n, M, N):
         for j in range(0,M):
             for k in range(0,M):
                 for l in range(0,M):
-                    if i==j and k==l:
-                        TWORDM[i,j,k,l] = 4*n[i]/2*n[k]/2
+                    if i==k and j==l:
+                        TWORDM[i,j,k,l] = 4*n[i]/2*n[j]/2
                     if i==l and k==j :
-                        TWORDM[i,j,k,l] -= 2*np.sqrt(n[i]/2*n[k]/2)
+                        TWORDM[i,j,k,l] -= 2*np.sqrt(n[i]/2*n[j]/2)
                     if i==l and k==j and (i >= N and k >= N) and l!=k :
-                        TWORDM[i,j,k,l] += 4*np.sqrt(n[i]/2*n[k]/2)
+                        TWORDM[i,j,k,l] += 4*np.sqrt(n[i]/2*n[j]/2)
                     
     return TWORDM
 

@@ -53,15 +53,6 @@ def twoDM_Eigvals(dm2):
     FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = np.transpose(dm2[2], (0, 2, 1, 3))
     return np.linalg.eigvalsh(np.reshape(FULL_2dm, ((2*N)**2, (2*N)**2)))
 
-def twoDM_Eigvals_phys(dm2):
-    N = dm2[0].shape[0]
-    FULL_2dm = np.zeros((dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2))
-    FULL_2dm[0:N,0:N,0:N,0:N]  =        dm2[0] 
-    FULL_2dm[0:N,N:2*N,0:N,N:2*N] =     dm2[1]
-    FULL_2dm[N:2*N,0:N,N:2*N,0:N] =     dm2[1]
-    FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = dm2[2]
-    return np.linalg.eigvalsh(np.reshape(FULL_2dm, ((2*N)**2, (2*N)**2)))
-
 def R_spectral_clean(dm1, M):
     
     occ_a, C_NAO_a = np.linalg.eigh(dm1)
@@ -83,29 +74,43 @@ def DM2_DiagSum(dm2):
     FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = np.transpose(dm2[2], (0, 2, 1, 3))
     return np.trace(np.reshape(FULL_2dm, (4*N**2, 4*N**2)))
 
-def DM2_DiagSum_phys(dm2):
-    N = dm2[0].shape[0]
-    FULL_2dm = np.zeros((dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2, dm2[0].shape[0]*2))
-    FULL_2dm[0:N,0:N,0:N,0:N]  = dm2[0]
-    FULL_2dm[0:N,N:2*N,0:N,N:2*N] = dm2[1]
-    FULL_2dm[N:2*N,0:N,N:2*N,0:N] = dm2[1]
-    FULL_2dm[N:2*N,N:2*N,N:2*N,N:2*N] = dm2[2]
-    return np.trace(np.reshape(FULL_2dm, (4*N**2, 4*N**2)))
 
-def BST_FIDX(FIDX, C_NAO_a, C_NAO_b):
-    FIDX_NAO_aa = FIDX[0].copy()
-    FIDX_NAO_ab = FIDX[1].copy()
-    FIDX_NAO_bb = FIDX[2].copy()
-    for i in range(4):
-        FIDX_NAO_aa = np.tensordot(FIDX_NAO_aa, C_NAO_a, axes=1).transpose(3, 0, 1, 2)
-        FIDX_NAO_bb = np.tensordot(FIDX_NAO_bb, C_NAO_b, axes=1).transpose(3, 0, 1, 2)
+
+def BST_FIDX(FIDX, C_a, C_b):
+    """
+    Transforms any given index tensor from one orthonormal basis into another 
+    using Coefficient matrices C_a and C_b.
+
+    Parameters:
+    FIDX : tuple of np.ndarray
+        A tuple containing three tensors: (FIDX_aa, FIDX_ab, FIDX_bb), which represent 
+        a four index tensor in different spin channels.
+    C_a : np.ndarray
+        Coefficient matrix for spin-up (alpha) orbitals.
+    C_b : np.ndarray
+        Coefficient matrix for spin-down (beta) orbitals.
+
+    Returns:
+    tuple of np.ndarray
+        The transformed Four index tensors (T_FIDX_aa, T_FIDX_ab, T_FIDX_bb) in the NAO basis.
+    """
+    # Copy input tensors to avoid modifying the original data
+    T_FIDX_aa = FIDX[0].copy()
+    T_FIDX_ab = FIDX[1].copy()
+    T_FIDX_bb = FIDX[2].copy()
     
-    FIDX_NAO_ab = np.tensordot(FIDX_NAO_ab, C_NAO_a, axes=1).transpose(3, 0, 1, 2)
-    FIDX_NAO_ab = np.tensordot(FIDX_NAO_ab, C_NAO_a, axes=1).transpose(3, 0, 1, 2)
-    FIDX_NAO_ab = np.tensordot(FIDX_NAO_ab, C_NAO_b, axes=1).transpose(3, 0, 1, 2)
-    FIDX_NAO_ab = np.tensordot(FIDX_NAO_ab, C_NAO_b, axes=1).transpose(3, 0, 1, 2)
-
-    return (FIDX_NAO_aa, FIDX_NAO_ab, FIDX_NAO_bb)
+    # Transform the spin-up (aa) and spin-down (bb) blocks through four contractions
+    for _ in range(4):
+        T_FIDX_aa = np.tensordot(FIDX_NAO_aa, C_NAO_a, axes=1).transpose(3, 0, 1, 2)
+        T_FIDX_bb = np.tensordot(FIDX_NAO_bb, C_NAO_b, axes=1).transpose(3, 0, 1, 2)
+    
+    # Transform the mixed spin (ab) block through four contractions
+    T_FIDX_ab = np.tensordot(FIDX_NAO_ab, C_NAO_a, axes=1).transpose(3, 0, 1, 2)
+    T_FIDX_ab = np.tensordot(FIDX_NAO_ab, C_NAO_a, axes=1).transpose(3, 0, 1, 2)
+    T_FIDX_ab = np.tensordot(FIDX_NAO_ab, C_NAO_b, axes=1).transpose(3, 0, 1, 2)
+    T_FIDX_ab = np.tensordot(FIDX_NAO_ab, C_NAO_b, axes=1).transpose(3, 0, 1, 2)
+    
+    return (T_FIDX_aa, T_FIDX_ab, T_FIDX_bb)
 
 def R_Vee(eri,dm2):
     ''' Compute electron-electron repulsion for 2 body integrals and 2RDM
