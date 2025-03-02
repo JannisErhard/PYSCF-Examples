@@ -1,6 +1,7 @@
 import numpy as np
 
 def PNOF2(n_a, n_b, M, N_a, N_b):
+    # Initialize Delta and Pi matrices with zeros
     """
     Compute the 2-RDM (Two-Particle Reduced Density Matrix) elements using the PNOF2 method.
     
@@ -20,7 +21,6 @@ def PNOF2(n_a, n_b, M, N_a, N_b):
     TWORDM : tuple of numpy arrays
         Tuple containing three 4-dimensional numpy arrays representing different spin components.
     """
-    # Initialize Delta and Pi matrices with zeros
     Delta = np.zeros((M, M))
     Pi = np.zeros((M, M))
     
@@ -94,6 +94,26 @@ def PNOF2(n_a, n_b, M, N_a, N_b):
 
 
 def PNOF4(n_a, n_b, M, N_a, N_b):
+    """
+    Compute the 2-RDM (Two-Particle Reduced Density Matrix) elements using the PNOF4 method.
+    See: 
+    
+    Parameters:
+    n_a : array_like
+        Occupation numbers for alpha spin orbitals.
+    n_b : array_like
+        Occupation numbers for beta spin orbitals.
+    M : int
+        Number of spatial orbitals.
+    N_a : int
+        Number of alpha electrons.
+    N_b : int
+        Number of beta electrons.
+    
+    Returns:
+    TWORDM : tuple of numpy arrays
+        Tuple containing three 4-dimensional numpy arrays representing different spin components.
+    """
     # make Delta and Pi specific to PNOF2
     Delta = np.zeros((M,M))
     Pi = np.zeros((M,M))
