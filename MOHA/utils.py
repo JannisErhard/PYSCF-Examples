@@ -118,3 +118,26 @@ def Vee(eri,dm2):
         it is the energy component V_ee
     '''
     return .5*np.einsum('pqrs,pqrs', eri[0], dm2[0])+.5*np.einsum('pqrs,pqrs', eri[2], dm2[2])+np.einsum('pqrs,pqrs', eri[1], dm2[1])
+
+def generate_adjacency_matrix(N: int) -> np.ndarray:
+    """
+    Generates an adjacency matrix for a system with N sites,
+    where only nearest neighbors interact with periodic boundary conditions.
+    
+    Parameters:
+        N (int): Number of sites.
+    
+    Returns:
+        np.ndarray: NxN adjacency matrix.
+    """
+    adjacency_matrix = np.zeros((N, N), dtype=int)
+    
+    for i in range(N - 1):
+        adjacency_matrix[i, i + 1] = 1
+        adjacency_matrix[i + 1, i] = 1
+    
+    # Implement periodic boundary conditions
+    adjacency_matrix[0, N - 1] = 1
+    adjacency_matrix[N - 1, 0] = 1
+    
+    return adjacency_matrix
